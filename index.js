@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var port = process.env.PORT || 8080
 
 var questionRoutes = require('./routes/questions')
 
@@ -19,6 +20,6 @@ app.get('/', function(req, res) {
 
 app.use('/api/questions', questionRoutes)
 
-app.listen(3000, function(){
-  console.log("APP RUNNING ON PORT 3000");
+app.listen(port, function(){
+  console.log(`APP RUNNING ON PORT ${port}`);
 });
