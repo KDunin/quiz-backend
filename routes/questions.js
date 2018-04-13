@@ -22,10 +22,20 @@ router.post('/', function(req, res){
   })
 });
 
-router.delete('/:questionId', function(req, res){
-  db.Question.remove({ _id: req.params.questionId })
-    .then(function(deltedQuestion){
-      res.json(deltedQuestion)
+router.patch('/:id', function(req, res){
+  db.Question.findByIdAndUpdate( req.params.id, req.body, { new: true })
+    .then(function(question){
+      res.json(question)
+    })
+  .catch(function(err){
+    res.send(err)
+  }) 
+});
+
+router.delete('/:id', function(req, res){
+  db.Question.remove({ _id: req.params.id })
+    .then(function(question){
+      res.json(question)
     })
   .catch(function(err){
     res.send(err)
