@@ -6,16 +6,16 @@ exports.signin = async function(req, res, next) {
     let user = await db.User.findOne({
       username: req.body.username
     })
-    const { id, username, type } = user;
+    const { _id, username, type, questions } = user;
     let isMatch = await user.comparePassword(req.body.password);
     if(isMatch){
       let token = jwt.sign({
-        id,
+        id: _id,
         username,
         type,
       }, process.env.SECRET_KEY)
       return res.status(200).json({
-        id,
+        id: _id,
         username,
         token,
         type,
@@ -26,8 +26,9 @@ exports.signin = async function(req, res, next) {
         status: 400,
         message: "Invalid Username/Password"
       })
-    }
+    } 
   } catch (error) {
+    console.log(error)    
     return next({
       status: 400,
       message: "Invalid Username/Password"

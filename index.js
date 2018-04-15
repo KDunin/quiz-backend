@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const app = express();
+const cors = require("cors");
 const bodyParser = require('body-parser');
 const errorHandler = require('./handlers/error')
 const { loginRequired, ensureCorrectUser }  = require('./middleware/auth')
@@ -10,6 +11,7 @@ const port = process.env.PORT || 8080
 const questionRoutes = require('./routes/questions')
 const authRoutes = require('./routes/auth')
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 

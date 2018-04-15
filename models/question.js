@@ -3,14 +3,15 @@ var mongoose = require('mongoose');
 var questionSchema = new mongoose.Schema({
   question: {
     type: String,
-//     required: 'Question cannot be blank!'
+    required: 'Question cannot be blank!'
   },
   answers: {
     type: Array,
+    required: 'Provide options!'    
   },
   correct: {
     type: String,
-//     required: 'Provide correct answer!'
+    required: 'Provide correct answer!'
   }
 });
 
