@@ -12,14 +12,14 @@ exports.signin = async function(req, res, next) {
       let token = jwt.sign({
         id: _id,
         username,
-        type,
+        type
       }, process.env.SECRET_KEY)
       return res.status(200).json({
         id: _id,
         username,
+        questions,
         token,
-        type,
-        questions
+        type
       })
     } else {
       return next({
@@ -49,6 +49,7 @@ exports.signup = async function(req, res, next) {
     return res.status(200).json({
       id: _id,
       username,
+      questions,
       token,
       type
     })

@@ -1,23 +1,59 @@
-var db = require('../models');
+const db = require('../models');
 
-exports.getQuestions = function(req, res){
-  db.Question.find()
-    .then(function(questions){
-      res.json(questions);
+exports.getQuestions = async function(req, res, next){
+  try {
+    const questions = await db.Question.find({
+      user: undefined,
     })
-    .catch(function(err){
-      res.send(err);
-  })
+    if (questions) {
+      return res.status(200).json(questions)
+    }
+    else {
+      return next({ status: 400, message: "Cannot get questions list." });
+    }
+  } catch(error) {
+    return next({ status: 400, message: "Cannot get questions list." });
+  }
 }
 
-exports.createQuestion = function(req, res){
-  db.Question.create(req.body)
-    .then(function(newQuestion){
-      res.status(201).json(newQuestion)
-    })
-  .catch(function(err){
-    re.send(err)
-  })
+exports.createQuestion = async function(req, res, next){
+  try {
+    const question = await db.Question.create(req.body)
+    if (question) {
+      return res.status(201).json(question)  
+    }
+    else {
+      return next({ status: 400, message: "Creating question failed." });
+    }
+  } catch(error) {
+    return next(error)
+  }
 }
 
-module.exports = exports;
+exports.editQuestion = async function(req, res, next){
+  try {
+    const question = await db.Question.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    if (question) {
+      return res.json(question)  
+    }
+    else {
+      return next({ status: 400, message: "Editing question failed." });
+    }
+  } catch(error) {
+    return next(error)
+  }
+}
+
+exports.deleteQuestion = async function(req, res, next){
+  try {
+    const question = await db.Question.remove({ _id: req.params.id })
+    if (question) {
+      return res.json(req)
+    }
+    else {
+      return next({ status: 400, message: "Deleting question failed." });
+    }
+  } catch(error) {
+    return next(error)
+  }
+}

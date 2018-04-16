@@ -15,7 +15,11 @@ const userSchema = new mongoose.Schema({
   type: {
     type: String,
     default: "User",
-  }
+  },
+  questions: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Question",
+  }]
 });
 
 userSchema.pre("save", function(next) {
@@ -28,7 +32,6 @@ userSchema.pre("save", function(next) {
       return hash
     });
     this.password = hashedPassword
-    console.log(hashedPassword, this.password)
     return next();
   } catch (err) {
     return next(err);

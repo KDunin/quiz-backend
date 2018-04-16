@@ -10,6 +10,7 @@ const port = process.env.PORT || 8080
 
 const questionRoutes = require('./routes/questions')
 const authRoutes = require('./routes/auth')
+const userQuestionRoutes = require('./routes/userQuestions')
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -23,14 +24,12 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', function(req, res) {
-  res.send('Is this thing on?');
+  res.send('Server started.');
 });
 
 app.use('/api/auth', authRoutes)
-app.use('/api/questions',
-  questionRoutes
-)
-
+app.use('/api/user/:id', loginRequired, ensureCorrectUser, userQuestionRoutes)
+app.use('/api/questions', loginRequired, questionRoutes)
 
 app.use(function(req, res, next) {
   let err = new Error("Not Found");
