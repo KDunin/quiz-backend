@@ -28,7 +28,6 @@ exports.signin = async function(req, res, next) {
       })
     } 
   } catch (error) {
-    console.log(error)    
     return next({
       status: 400,
       message: "Invalid Username/Password"
@@ -39,6 +38,12 @@ exports.signin = async function(req, res, next) {
 
 exports.signup = async function(req, res, next) {
   try {
+    if(req.body.type !== undefined) {
+      return next({
+        status: 400,
+        message: "Invalid type."
+      });
+    }
     let user = await db.User.create(req.body);
     const { _id, username, type } = user
     const token = jwt.sign({
@@ -49,7 +54,6 @@ exports.signup = async function(req, res, next) {
     return res.status(200).json({
       id: _id,
       username,
-      questions,
       token,
       type
     })

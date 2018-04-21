@@ -18,6 +18,7 @@ exports.getUserQuestions = async function(req, res, next) {
 
 // POST - /api/user/:id/
 exports.createUserQuestion = async function(req, res, next){
+  console.log(req.body)
   try {
     const question = await db.Question.create({
       question: req.body.question,
@@ -51,11 +52,10 @@ exports.editUserQuestion = async function(req, res, next) {
 
 // DELETE - /api/user/:id/questions/:question_id
 exports.deleteUserQuestion = async function(req, res, next) {
-  console.log(req.params)
   try {
     const question = await db.Question.remove({ _id: req.params.question_id })
-    return next({ message: "Deleting question sucess." });
+    return res.json("Deleting question sucess.");
   } catch(error) {
-    return next(error)
+    return next({ status: 400, message: "Deleting question failed." });
   }
 }

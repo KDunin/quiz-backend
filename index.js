@@ -29,7 +29,7 @@ app.get('/', function(req, res) {
 
 app.use('/api/auth', authRoutes)
 app.use('/api/user/:id', loginRequired, ensureCorrectUser, userQuestionRoutes)
-app.use('/api/questions', loginRequired, questionRoutes)
+app.use('/api/questions', questionRoutes)
 
 app.use(function(req, res, next) {
   let err = new Error("Not Found");

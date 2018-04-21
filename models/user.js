@@ -5,12 +5,11 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     unique: true,
+    required: 'Username is required',
   },
   password: {
     type: String,
-  },
-  questions: {
-    type: Array,
+    required: 'Password is required',    
   },
   type: {
     type: String,
@@ -41,7 +40,6 @@ userSchema.pre("save", function(next) {
 userSchema.methods.comparePassword = function(candidatePassword, next) {
   try {
     let isMatch = bcrypt.compareSync(candidatePassword, this.password);
-    console.log("Match", isMatch)
     return isMatch;
   } catch (err) {
     return next(err);
