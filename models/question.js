@@ -14,6 +14,10 @@ var questionSchema = new mongoose.Schema({
     type: String,
     required: 'Provide correct answer!'
   },
+  category: {
+    type: String,
+    required: 'Provide question category'
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

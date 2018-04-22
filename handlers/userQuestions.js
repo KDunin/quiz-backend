@@ -18,7 +18,6 @@ exports.getUserQuestions = async function(req, res, next) {
 
 // POST - /api/user/:id/
 exports.createUserQuestion = async function(req, res, next){
-  console.log(req.body)
   try {
     const question = await db.Question.create({
       question: req.body.question,
@@ -46,7 +45,6 @@ exports.editUserQuestion = async function(req, res, next) {
   }
   try {
     const modyfiedQuestion = await db.Question.findByIdAndUpdate(req.params.question_id, req.body, { new: true })
-    console.log(modyfiedQuestion)
     if (modyfiedQuestion) {
       return res.json(modyfiedQuestion)
     }
