@@ -37,25 +37,39 @@ exports.createUserQuestion = async function(req, res, next){
 
 // PATCH - /api/user/:id/questions/:question_id
 exports.editUserQuestion = async function(req, res, next) {
+  const question = await db.Question.findById(req.params.question_id)
+  if (!question) {
+    return next({ status: 422, message: "Question not found!" });
+  }
+  if (req.params.id != question.user) {
+    return next({ status: 401, message: 'You can modify only own questions' })
+  }
   try {
-    const question = await db.Question.findByIdAndUpdate(req.params.question_id, req.body, { new: true })
-    if (question) {
-      return res.json(question)  
-    }
-    else {
-      return next({ status: 400, message: "Editing question failed." });
+    const modyfiedQuestion = await db.Question.findByIdAndUpdate(req.params.question_id, req.body, { new: true })
+    console.log(modyfiedQuestion)
+    if (modyfiedQuestion) {
+      return res.json(modyfiedQuestion)
     }
   } catch(error) {
-    return next(error)
+    return next({ status: 400, message: "Editing question failed." });
   }
 }
 
 // DELETE - /api/user/:id/questions/:question_id
 exports.deleteUserQuestion = async function(req, res, next) {
+  const question = await db.Question.findById(req.params.question_id)
+  if (!question) {
+    return next({ status: 422, message: "Question not found!" });
+  }
+  if (req.params.id != question.user) {
+    return next({ status: 401, message: 'You can delete only own questions' })
+  }
   try {
-    const question = await db.Question.remove({ _id: req.params.question_id })
-    return res.json("Deleting question sucess.");
+    const deletedQuestion = await db.Question.remove({ _id: req.params.question_id })
+    if (deletedQuestion) {
+      return res.json('Question successfully deleted!')
+    }
   } catch(error) {
-    return next({ status: 400, message: "Deleting question failed." });
+    return  next({ status: 400, message:  "Deleting question failed." });
   }
 }

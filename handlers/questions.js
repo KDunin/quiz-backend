@@ -34,26 +34,26 @@ exports.editQuestion = async function(req, res, next){
   try {
     const question = await db.Question.findByIdAndUpdate(req.params.id, req.body, { new: true })
     if (question) {
-      return res.json(question)  
+      return res.json('Question successfully modify!')
     }
     else {
-      return next({ status: 400, message: "Editing question failed." });
+      return next({ status: 400, message: "Question not found!" });
     }
   } catch(error) {
-    return next(error)
+    return next({ status: 400, message: "Editing question failed." });
   }
 }
 
 exports.deleteQuestion = async function(req, res, next){
   try {
     const question = await db.Question.remove({ _id: req.params.id })
-    if (question) {
-      return res.json(req)
+    if (question.n) {
+      return res.json('Question successfully deleted!')
     }
     else {
-      return next({ status: 400, message: "Deleting question failed." });
+      return next({ status: 400, message: "Question not found!" });
     }
   } catch(error) {
-    return next(error)
+    return  next({ status: 400, message:  "Deleting question failed." });
   }
 }
