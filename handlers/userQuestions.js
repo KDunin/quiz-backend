@@ -23,6 +23,7 @@ exports.createUserQuestion = async function(req, res, next){
       question: req.body.question,
       answers: req.body.answers,
       correct: req.body.correct,
+      category: req.body.category,
       user: req.params.id
     })
     const foundUser = await db.User.findById(req.params.id);
