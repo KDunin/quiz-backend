@@ -19,10 +19,7 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Question",
   }],
-  socials: [{
-    type: String,
-    unique: true
-  }]
+  socials: []
 });
 
 userSchema.pre("save", function(next) {

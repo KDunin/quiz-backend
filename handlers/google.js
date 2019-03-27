@@ -1,22 +1,19 @@
 const db = require('../models');
+const jwt = require('jsonwebtoken');
 const {OAuth2Client} = require('google-auth-library');
-const CLIENT_ID = '188053040388-8g2mttb5udorqlnp6vnkglpjnud2psmj.apps.googleusercontent.com';
-const client = new OAuth2Client(CLIENT_ID);
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 exports.google = async function(req, res, next) {
   try {
-    let user = await db.User.findOne({ username: req.body.email })
     const googleToken = await verify(req.body.token);
-  
+    const user = await db.User.findOne({ socials: googleToken })
+
     if (!user) {
       user = await db.User.create({
         username: req.body.email,
-        password: ''
+        password: process.env.DEFAULT_PASS,
+        socials: [googleToken]
       });
-
-      user = await db.User.updateOne({ username: req.body.email }, {
-        social: social.concat(googleToken)
-      })
     }
 
     const { _id, username, type, questions } = user;
@@ -45,7 +42,7 @@ exports.google = async function(req, res, next) {
 async function verify(token) {
   const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: CLIENT_ID,
+      audience: process.env.CLIENT_ID,
   });
 
   const payload = ticket.getPayload();
