@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
   questions: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Question",
+  }],
+  socials: [{
+    type: String,
+    unique: true
   }]
 });
 
